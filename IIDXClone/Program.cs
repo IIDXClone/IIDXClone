@@ -41,7 +41,7 @@ namespace IIDXClone {
 		public override void Load() => ActiveScene?.Load();
 		public override void Draw() => ActiveScene?.Draw();
 		public override void Update(float dt) => ActiveScene?.Update(dt);
-		public override void KeyPressed(KeyConstant key, Scancode scancode, bool isRepeat) => ActiveScene?.ActionStarted(new InputEventArgs(Actions[key], 0f));
+		public override void KeyPressed(KeyConstant key, Scancode scancode, bool isRepeat) => ActiveScene?.ActionStarted(new InputEventArgs(key.FromKeyConstant(), 0f));
 	}
 
 }

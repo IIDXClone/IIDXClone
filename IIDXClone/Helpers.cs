@@ -1,3 +1,4 @@
+using System;
 using Love;
 
 namespace IIDXClone {
@@ -9,6 +10,14 @@ namespace IIDXClone {
 
 		public static int CenterY(this Text drawable) {
 			return Graphics.GetHeight() / 2 - drawable.GetHeight() / 2;
+		}
+
+		internal static IIDXAction FromKeyConstant(this KeyConstant key) {
+			try {
+				return Input.Actions[key];
+			} catch (Exception e) {
+				return IIDXAction.Blank;
+			}
 		}
 	}
 

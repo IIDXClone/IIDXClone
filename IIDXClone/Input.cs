@@ -23,6 +23,7 @@ namespace IIDXClone {
 	}
 
 	internal enum IIDXAction {
+		Blank,
 		P1Start,
 		P2Start,
 		P1TTUp,
