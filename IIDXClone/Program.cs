@@ -11,9 +11,10 @@ namespace IIDXClone {
 			WindowWidth = 1280,
 			WindowHeight = 720,
 			WindowVsync = false,
-			WindowTitle = "IIDX"
+			WindowTitle = "IIDX",
+			WindowDisplay = 0
 		};
-		
+
 		public static void Main(string[] args) {
 			Boot.Init(Config);
 			Boot.Run(new SceneHolder(new Splash()));
@@ -26,10 +27,11 @@ namespace IIDXClone {
 		internal Base ActiveScene;
 
 		internal SceneHolder(Base startScene) {
-			if(Instance != null)
+			if (Instance != null)
 				return;
-
 			Instance = this;
+
+			Graphics.SetFont(FontManager.Fonts["normal"]);
 			
 			ActiveScene = startScene;
 		}
@@ -37,8 +39,7 @@ namespace IIDXClone {
 		internal void Log(string source, object message) {
 			Console.WriteLine($"[{source}] {message}");
 		}
-		
-		public override void Load() => ActiveScene?.Load();
+
 		public override void Draw() => ActiveScene?.Draw();
 		public override void Update(float dt) => ActiveScene?.Update(dt);
 		public override void KeyPressed(KeyConstant key, Scancode scancode, bool isRepeat) => ActiveScene?.ActionStarted(new InputEventArgs(key.FromKeyConstant(), 0f));

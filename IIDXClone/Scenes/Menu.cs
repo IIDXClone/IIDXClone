@@ -8,12 +8,13 @@ namespace IIDXClone.Scenes {
 
 		private int _selectedIndex = 0;
 		private readonly List<MenuOption> _options = new List<MenuOption>();
+		private readonly Text _mainText = Graphics.NewText(FontManager.Fonts["big"], "IIDXClone");
 
-		private void Play() {
+		private static void Play() {
 			
 		}
 
-		private void Exit() {
+		private static void Exit() {
 			Environment.Exit(0);
 		}
 
@@ -21,7 +22,7 @@ namespace IIDXClone.Scenes {
 			_options.Add(new MenuOption("Play", Play));
 			_options.Add(new MenuOption("Exit", Exit));
 		}
-
+		
 		public override void ActionStarted(Input.InputEventArgs action) {
 			switch (action.Action) {
 				case IIDXAction.P1Start:
@@ -39,8 +40,16 @@ namespace IIDXClone.Scenes {
 		}
 
 		public override void Draw() {
-			var offset = 0;
-			foreach (var option in _options) {
+			Graphics.SetColor(1f, 1f, 1f);
+			Graphics.Draw(
+				_mainText,
+				_mainText.CenterX(),
+				_mainText.CenterY() - _mainText.GetHeight());
+
+			// Options
+			for (var offset = 0; offset < _options.Count; offset++) {
+				var option = _options[offset];
+
 				if (offset != _selectedIndex) {
 					Graphics.SetColor(1f, 1f, 1f);
 				} else {
@@ -48,10 +57,9 @@ namespace IIDXClone.Scenes {
 				}
 
 				Graphics.Draw(
-					option.Text, 
+					option.Text,
 					option.Text.CenterX(),
 					option.Text.CenterY() + offset * option.Text.GetHeight());
-				offset++;
 			}
 		}
 
