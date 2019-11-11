@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+		<GenerateDependencyFile>false</GenerateDependencyFile>
+		<Company>ItsNovaHere</Company>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DebugType>none</DebugType>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Love2dCS" Version="11.0.41" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resource\Image\Splash\Main.png" />
+      <Content Include="Resource\Image\Splash\Main.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+</Project>
