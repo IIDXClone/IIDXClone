@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using IIDXClone.Managers;
 using IIDXClone.Scenes;
 using Love;
 using static IIDXClone.Input;
 using static Love.Graphics;
+using File = System.IO.File;
 
 namespace IIDXClone {
 
@@ -19,31 +22,37 @@ namespace IIDXClone {
 		};
 
 		public static void Log(string message, LogLevel level = LogLevel.Info) {
+			var prefix = "";
 			switch (level) {
 				case LogLevel.Info:
 					Console.ForegroundColor = ConsoleColor.White;
-					Console.Write("[INFO]");
+					prefix = "[INFO]";
 					break;
 				case LogLevel.Warn:
 					Console.ForegroundColor = ConsoleColor.Yellow;
-					Console.Write("[WARN]");
+					prefix = "[INFO]";
 					break;
 				case LogLevel.Error:
 					Console.ForegroundColor = ConsoleColor.Red;
-					Console.Write("[ERROR]");
+					prefix = "[INFO]";
 					break;
 			}
 
-			Console.WriteLine($" {message}");
+			Console.WriteLine($"{prefix} {message}");
+			File.AppendAllText("log.txt", $"{prefix} {message} \n");
 		}
 
 		public static void Main(string[] args) {
+			File.WriteAllText("log.txt", $"IIDXClone Log for {DateTime.Now.ToString(CultureInfo.CurrentCulture)} \n ---------------------------------- \n");
+			
 			if (!Directory.Exists("Songs")) {
 				Log("Songs directory does not exist, creating...");
 				Log($"Created song directory : {Directory.CreateDirectory("Songs").FullName}");
 			} else {
 				Log($"Songs directory found : {Path.GetFullPath("Songs")}");
 			}
+			
+			SongManager.InitializeSongDirectory("Songs");
 			
 			Boot.Init(Config);
 			Boot.Run(new SceneHolder(args.Contains("--skipSplash") ? (Base) new Menu() : new Splash()));
