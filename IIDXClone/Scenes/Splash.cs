@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Love;
+using static Love.Graphics;
 
 namespace IIDXClone.Scenes {
 
@@ -17,21 +18,21 @@ namespace IIDXClone.Scenes {
 				var splashIndex = Mathf.Floor(TimeSinceStart / SplashTime);
 				var currentSplash = _splashImages[(int) splashIndex];
 
-				Graphics.SetColor(1, 1, 1, Mathf.Lerp(0, 1, (TimeSinceStart - splashIndex * SplashTime) / FadeTime));
+				SetColor(1, 1, 1, Mathf.Lerp(0, 1, (TimeSinceStart - splashIndex * SplashTime) / FadeTime));
 				Graphics.Draw(
 					currentSplash,
-					sx: (float) Graphics.GetWidth() / currentSplash.GetWidth(),
-					sy: (float) Graphics.GetHeight() / currentSplash.GetHeight());
+					sx: (float) GetWidth() / currentSplash.GetWidth(),
+					sy: (float) GetHeight() / currentSplash.GetHeight());
 			}
 			else {
-				SceneHolder.Instance.ActiveScene = new Menu();
+				SwitchScenes(new Menu());
 			}
 		}
 
 		public override void ActionStarted(Input.InputEventArgs action) {
 			if (action.Action == IIDXAction.P1Start) {
-				Log("Splash", "Skipping splash screens...");
-				SceneHolder.Instance.ActiveScene = new Menu();
+				Log("Skipping splash screens...");
+				SwitchScenes(new Menu());
 			}
 		}
 	}

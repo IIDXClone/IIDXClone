@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Love;
 
-namespace IIDXClone {
+namespace IIDXClone.Managers {
 
 	public class FontManager {
 		public static Dictionary<string, Font> Fonts = new Dictionary<string, Font>() {

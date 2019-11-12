@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using IIDXClone.Scenes;
 using Love;
 using static IIDXClone.Input;
+using static Love.Graphics;
 
 namespace IIDXClone {
 
@@ -15,9 +18,41 @@ namespace IIDXClone {
 			WindowDisplay = 0
 		};
 
+		public static void Log(string message, LogLevel level = LogLevel.Info) {
+			switch (level) {
+				case LogLevel.Info:
+					Console.ForegroundColor = ConsoleColor.White;
+					Console.Write("[INFO]");
+					break;
+				case LogLevel.Warn:
+					Console.ForegroundColor = ConsoleColor.Yellow;
+					Console.Write("[WARN]");
+					break;
+				case LogLevel.Error:
+					Console.ForegroundColor = ConsoleColor.Red;
+					Console.Write("[ERROR]");
+					break;
+			}
+
+			Console.WriteLine($" {message}");
+		}
+
 		public static void Main(string[] args) {
+			if (!Directory.Exists("Songs")) {
+				Log("Songs directory does not exist, creating...");
+				Log($"Created song directory : {Directory.CreateDirectory("Songs").FullName}");
+			} else {
+				Log($"Songs directory found : {Path.GetFullPath("Songs")}");
+			}
+			
 			Boot.Init(Config);
-			Boot.Run(new SceneHolder(new Splash()));
+			Boot.Run(new SceneHolder(args.Contains("--skipSplash") ? (Base) new Menu() : new Splash()));
+		}
+
+		public enum LogLevel {
+			Info,
+			Warn,
+			Error
 		}
 	}
 
@@ -27,20 +62,25 @@ namespace IIDXClone {
 		internal Base ActiveScene;
 
 		internal SceneHolder(Base startScene) {
-			if (Instance != null)
-				return;
-			Instance = this;
-
-			Graphics.SetFont(FontManager.Fonts["normal"]);
+			if (Instance == null)
+				Instance = this;
 			
 			ActiveScene = startScene;
 		}
 
-		internal void Log(string source, object message) {
-			Console.WriteLine($"[{source}] {message}");
+		internal void Log(object message, Program.LogLevel level = Program.LogLevel.Info) {
+			Program.Log(message.ToString(), level);
 		}
 
-		public override void Draw() => ActiveScene?.Draw();
+		public override void Draw() {
+			ActiveScene?.Draw();
+
+			var fps = $"FPS {Timer.GetFPS()}";
+			SetColor(0f, 0f, 0f);
+			Rectangle(DrawMode.Fill, 0, 0, GetFont().GetWidth(fps), GetFont().GetHeight());
+			SetColor(1f, 1f, 1f);
+			Print(fps);
+		}
 		public override void Update(float dt) => ActiveScene?.Update(dt);
 		public override void KeyPressed(KeyConstant key, Scancode scancode, bool isRepeat) => ActiveScene?.ActionStarted(new InputEventArgs(key.FromKeyConstant(), 0f));
 	}
