@@ -55,6 +55,8 @@ namespace IIDXClone {
 			}
 			
 			new Thread(SongManager.InitializeSongDirectory).Start();
+
+			Love.Log.Target = Love.Log.TargetType.DiagnosticsTrace;
 			
 			Boot.Init(Config);
 			Boot.Run(new SceneHolder(args.Contains("--skipSplash") ? (Base) new Menu() : new Splash()));
