@@ -2,12 +2,14 @@
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using IIDXClone.Managers;
 using IIDXClone.Scenes;
 using Love;
 using static IIDXClone.Input;
 using static Love.Graphics;
 using File = System.IO.File;
+using Timer = Love.Timer;
 
 namespace IIDXClone {
 
@@ -52,7 +54,7 @@ namespace IIDXClone {
 				Log($"Songs directory found : {Path.GetFullPath("Songs")}");
 			}
 			
-			SongManager.InitializeSongDirectory("Songs");
+			new Thread(SongManager.InitializeSongDirectory).Start();
 			
 			Boot.Init(Config);
 			Boot.Run(new SceneHolder(args.Contains("--skipSplash") ? (Base) new Menu() : new Splash()));
