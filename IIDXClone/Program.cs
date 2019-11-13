@@ -28,20 +28,20 @@ namespace IIDXClone {
 			switch (level) {
 				case LogLevel.Info:
 					Console.ForegroundColor = ConsoleColor.White;
-					prefix = "[INFO]";
+					prefix = "INFO";
 					break;
 				case LogLevel.Warn:
 					Console.ForegroundColor = ConsoleColor.Yellow;
-					prefix = "[INFO]";
+					prefix = "WARN";
 					break;
 				case LogLevel.Error:
 					Console.ForegroundColor = ConsoleColor.Red;
-					prefix = "[INFO]";
+					prefix = "ERROR";
 					break;
 			}
 
-			Console.WriteLine($"{prefix} {message}");
-			File.AppendAllText("log.txt", $"{prefix} {message} \n");
+			Console.WriteLine($"[{prefix} | {DateTime.Now}] {message}");
+			File.AppendAllText("log.txt", $"[{prefix} | {DateTime.Now}] {message} \n");
 		}
 
 		public static void Main(string[] args) {
