@@ -42,6 +42,59 @@ namespace IIDXClone {
 
 			return output;
 		}
+		public static int FromBase16(this string input) {
+			if (input.Length > 2) return -1;
+			var splitInput = input.ToCharArray();
+			var output = 0;
+			
+			if (char.IsNumber(splitInput[0])) { 
+				output = splitInput[0] - 0x30;
+			} else if (char.IsLetter(splitInput[0])) {
+				output = splitInput[0] - 0x37;
+			} else {
+				return -1;
+			}
+
+			output *= 16;
+			
+			if (char.IsNumber(splitInput[1])) {
+				output += splitInput[1] - 0x30;
+			} else if (char.IsLetter(splitInput[1])) {
+				output += splitInput[1] - 0x37;
+			} else {
+				return -1;
+			}
+
+			return output;
+		}
+		
+		public static string[] Split(this string input, int length) {
+			var strings = new List<string>();
+
+			var tempString = "";
+			foreach (var v in input.ToCharArray()) {
+				if (tempString.Length >= length) {
+					strings.Add(tempString);
+					tempString = "";
+				}
+
+				tempString += v;
+			}
+			
+			return strings.ToArray();
+		}
+
+		internal static byte ToLane(this Channel input) {
+			if (input >= Channel.P1Scratch) {
+				if (input == Channel.P1Scratch) {
+					return 8;
+				} else {
+					return (byte) (input - 0x12);
+				}
+			} else {
+				return (byte) (input - 0x11);
+			}
+		}
 
 		internal static IIDXAction FromKeyConstant(this KeyConstant key) {
 			try {

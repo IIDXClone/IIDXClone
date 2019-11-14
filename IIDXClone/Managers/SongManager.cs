@@ -87,11 +87,17 @@ namespace IIDXClone.Managers {
 				};
 
 				foreach (var line in lineGroup) {
-					var channel = (Channel) line.Substring(4, 2).FromBase36();
-					switch (channel) {
-						case Channel.P1Key1:
-							
-							break;
+					var measure = int.Parse(line.Substring(1, 3));
+					var channel = (Channel) line.Substring(4, 2).FromBase16();
+
+					if (channel >= Channel.P1Key1 && channel <= Channel.P1Key7) {
+						var split = line.Substring(7).Split(2);
+						for (var index = 0; index < split.Length; index++) {
+							var audio = split[index];
+							if (audio.FromBase36() > 0) {
+								timeSection.Notes.Add(new Note(measure + index / split.Length, channel.ToLane(), audio.FromBase36(), true));
+							}
+						}
 					}
 				}
 
@@ -138,27 +144,27 @@ namespace IIDXClone.Managers {
 	}
 
 	internal enum Channel {
-		BGM = 1,
-		MeasureLength = 2,
-		BPM = 3,
-		BGABase = 4,
-		BGAPoor = 6,
-		P1Key1 = 11,
-		P1Key2 = 12,
-		P1Key3 = 13,
-		P1Key4 = 14,
-		P1Key5 = 15,
-		P1Scratch = 16,
-		P1Key6 = 18,
-		P1Key7 = 19,
-		P1Invis1 = 31,
-		P1Invis2 = 32,
-		P1Invis3 = 33,
-		P1Invis4 = 34,
-		P1Invis5 = 35,
-		P1InvisScratch = 36,
-		P1Invis6 = 38,
-		P1Invis7 = 39,
+		BGM = 0x1,
+		MeasureLength = 0x2,
+		BPM = 0x3,
+		BGABase = 0x4,
+		BGAPoor = 0x6,
+		P1Key1 = 0x11,
+		P1Key2 = 0x12,
+		P1Key3 = 0x13,
+		P1Key4 = 0x14,
+		P1Key5 = 0x15,
+		P1Scratch = 0x16,
+		P1Key6 = 0x18,
+		P1Key7 = 0x19,
+		P1Invis1 = 0x31,
+		P1Invis2 = 0x32,
+		P1Invis3 = 0x33,
+		P1Invis4 = 0x34,
+		P1Invis5 = 0x35,
+		P1InvisScratch = 0x36,
+		P1Invis6 = 0x38,
+		P1Invis7 = 0x39,
 	}
 	
 	internal enum Difficulty {
