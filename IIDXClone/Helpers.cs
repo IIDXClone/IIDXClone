@@ -87,15 +87,20 @@ namespace IIDXClone {
 		internal static byte ToLane(this Channel input) {
 			if (input >= Channel.P1Scratch) {
 				if (input == Channel.P1Scratch) {
-					return 8;
-				} else {
-					return (byte) (input - 0x12);
+					return 7;
 				}
-			} else {
-				return (byte) (input - 0x11);
+
+				return (byte) (input - 0x13);
 			}
+
+			return (byte) (input - 0x11);
 		}
 
+		internal static float BarToSeconds(this float input, float bpm) {
+			input *= 4;
+			return input * (1 / (bpm / 60));
+		}
+		
 		internal static IIDXAction FromKeyConstant(this KeyConstant key) {
 			try {
 				return Input.Actions[key];

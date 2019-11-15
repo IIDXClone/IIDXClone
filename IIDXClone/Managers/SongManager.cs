@@ -49,7 +49,8 @@ namespace IIDXClone.Managers {
 			}
 		}
 
-		internal static SongData GetBMEData(string file) {
+		internal static SongData GetBMEData(SongInfo info) {
+			var file = info.Path;
 			var data = new SongData();
 			data.TimeSections = new List<TimeSection>();
 			data.Audio = new Dictionary<int, Source>();
@@ -95,7 +96,7 @@ namespace IIDXClone.Managers {
 						for (var index = 0; index < split.Length; index++) {
 							var audio = split[index];
 							if (audio.FromBase36() > 0) {
-								timeSection.Notes.Add(new Note(measure + index / split.Length, channel.ToLane(), audio.FromBase36(), true));
+								timeSection.Notes.Add(new Note((measure + (float)index / split.Length).BarToSeconds(info.BPM), channel.ToLane(), audio.FromBase36(), true));
 							}
 						}
 					}

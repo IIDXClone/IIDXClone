@@ -80,7 +80,7 @@ namespace IIDXClone {
 			
 			ActiveScene = startScene;
 			
-			Graphics.SetFont(FontManager.Fonts["normal"]);
+			SetFont(FontManager.Fonts["normal"]);
 		}
 
 		internal void Log(object message, Program.LogLevel level = Program.LogLevel.Info) {

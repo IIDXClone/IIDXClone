@@ -16,7 +16,7 @@ namespace IIDXClone.Scenes {
 					SwitchScenes(new Menu());
 					break;
 				case IIDXAction.P1Start:
-					SceneHolder.Instance.ActiveScene = new Game(SongManager.Songs[_selectedIndex].Path);
+					SceneHolder.Instance.ActiveScene = new Game(SongManager.Songs[_selectedIndex]);
 					break;
 				case IIDXAction.P1TTUp:
 					if (--_selectedIndex < 0)
