@@ -12,6 +12,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Hid.Net" Version="3.1.0" />
       <PackageReference Include="Love2dCS" Version="11.0.41" />
     </ItemGroup>
 
