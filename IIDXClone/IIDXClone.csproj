@@ -33,7 +33,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="Resource\Image\Splash\Main.png" />
+      <Content Include="Resource\Image\Splash\Main.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

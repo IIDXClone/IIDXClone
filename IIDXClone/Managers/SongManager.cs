@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -83,20 +84,28 @@ namespace IIDXClone.Managers {
 			foreach (var lineGroup in lines) {
 				if (lineGroup == null) continue;
 
-				var timeSection = new TimeSection {
-					Notes = new List<Note>()
-				};
+				var timeSection = new TimeSection(0);
 
 				foreach (var line in lineGroup) {
 					var measure = int.Parse(line.Substring(1, 3));
 					var channel = (Channel) line.Substring(4, 2).FromBase16();
 
+					if (channel == Channel.BGM) {
+						var split = line.Substring(7).Split(2);
+						for (var index = 0; index < split.Length; index++) {
+							var audio = split[index];
+							if (audio.FromBase36() > 0) {
+								timeSection.BGM.Add(new TimedAudio((measure + (float)index / (split.Length + 1)).BarToSeconds(info.BPM), data.Audio[audio.FromBase36()]));
+							}
+						}
+					}
+					
 					if (channel >= Channel.P1Key1 && channel <= Channel.P1Key7) {
 						var split = line.Substring(7).Split(2);
 						for (var index = 0; index < split.Length; index++) {
 							var audio = split[index];
 							if (audio.FromBase36() > 0) {
-								timeSection.Notes.Add(new Note((measure + (float)index / split.Length).BarToSeconds(info.BPM), channel.ToLane(), audio.FromBase36(), true));
+								timeSection.Notes.Add(new Note((measure + (float)index / (split.Length + 1)).BarToSeconds(info.BPM), channel.ToLane(), data.Audio[audio.FromBase36()], true));
 							}
 						}
 					}
@@ -128,20 +137,54 @@ namespace IIDXClone.Managers {
 	internal struct TimeSection {
 		internal float Time;
 		internal List<Note> Notes;
+		internal List<TimedAudio> BGM;
+
+		internal TimeSection(float time = 0f) {
+			Time = time;
+			Notes = new List<Note>();
+			BGM = new List<TimedAudio>();
+		}
+	}
+
+	internal struct TimedAudio {
+		internal float Time;
+		internal OneshotAudio Audio;
+
+		internal TimedAudio(float time, Source audio) {
+			Time = time;
+			Audio = new OneshotAudio(audio);
+		}
 	}
 	
 	internal struct Note {
 		internal float Time;
 		internal byte Lane;
-		internal int Audio;
+		internal OneshotAudio Audio;
 		internal bool Visible;
 
-		internal Note(float time, byte lane, int audio, bool visible) {
+		internal Note(float time, byte lane, Source audio, bool visible) {
 			Time = time;
 			Lane = lane;
-			Audio = audio;
+			Audio = new OneshotAudio(audio);
 			Visible = visible;
 		}
+	}
+	
+	internal class OneshotAudio {
+	    internal Source Audio;
+	    private bool _played;
+
+	    internal OneshotAudio(Source audio) {
+		    Audio = audio;
+		    _played = false;
+	    }
+
+	    internal void Play() {
+		    if (_played) return;
+		    
+		    Audio.Play();
+		    _played = true;
+	    }
 	}
 
 	internal enum Channel {

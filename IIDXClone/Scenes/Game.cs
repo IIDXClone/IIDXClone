@@ -22,8 +22,15 @@ namespace IIDXClone.Scenes {
 		public override void Draw() {
 			var currentBar = (int) (TimeSinceStart / _barTime);
 			for (var i = currentBar; i < currentBar + 4; i++) {
-				if (i < 0 || i > _songData.TimeSections.Count) continue;
+				if (i < 0 || i > _songData.TimeSections.Count - 1) continue;
 
+				foreach (var a in _songData.TimeSections[i].BGM) {
+					var y = (a.Time - TimeSinceStart);
+					if (y <= 0) {
+						a.Audio.Play();
+					}
+				}
+				
 				foreach (var n in _songData.TimeSections[i].Notes) {
 					Image image;
 					int lane;
@@ -42,11 +49,17 @@ namespace IIDXClone.Scenes {
 						lane = 0;
 					}
 
+					var y = (n.Time - TimeSinceStart);
+					
 					Graphics.Draw(
 						image,
 						lane,
-						Graphics.GetHeight() - ((n.Time - TimeSinceStart) * 500)
+						Graphics.GetHeight() - (y * 500)
 					);
+
+					if (y <= 0) {
+						n.Audio.Play();
+					}
 				}
 			}
 		}
