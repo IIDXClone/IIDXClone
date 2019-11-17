@@ -95,7 +95,7 @@ namespace IIDXClone.Managers {
 						for (var index = 0; index < split.Length; index++) {
 							var audio = split[index];
 							if (audio.FromBase36() > 0) {
-								timeSection.BGM.Add(new TimedAudio((measure + (float)index / (split.Length + 1)).BarToSeconds(info.BPM), data.Audio[audio.FromBase36()]));
+								timeSection.BGM.Add(new TimedAudio((measure + (float)index / (split.Length)).BarToSeconds(info.BPM), data.Audio[audio.FromBase36()].Clone()));
 							}
 						}
 					}
@@ -105,7 +105,7 @@ namespace IIDXClone.Managers {
 						for (var index = 0; index < split.Length; index++) {
 							var audio = split[index];
 							if (audio.FromBase36() > 0) {
-								timeSection.Notes.Add(new Note((measure + (float)index / (split.Length + 1)).BarToSeconds(info.BPM), channel.ToLane(), data.Audio[audio.FromBase36()], true));
+								timeSection.Notes.Add(new Note((measure + (float)index / (split.Length)).BarToSeconds(info.BPM), channel.ToLane(), data.Audio[audio.FromBase36()].Clone(), true));
 							}
 						}
 					}

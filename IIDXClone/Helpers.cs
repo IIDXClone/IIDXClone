@@ -73,12 +73,12 @@ namespace IIDXClone {
 
 			var tempString = "";
 			foreach (var v in input.ToCharArray()) {
+				tempString += v;
+				
 				if (tempString.Length >= length) {
 					strings.Add(tempString);
 					tempString = "";
 				}
-
-				tempString += v;
 			}
 			
 			return strings.ToArray();

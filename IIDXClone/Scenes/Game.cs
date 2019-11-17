@@ -17,12 +17,15 @@ namespace IIDXClone.Scenes {
 		internal Game(SongInfo info) {
 			_songData = SongManager.GetBMEData(info);
 			_barTime = 1f.BarToSeconds(info.BPM);
+			TimeSinceStart = -1f;
 		}
 
 		public override void Draw() {
 			var currentBar = (int) (TimeSinceStart / _barTime);
-			for (var i = currentBar; i < currentBar + 4; i++) {
+			for (var i = currentBar - 1; i < currentBar + 4; i++) {
+				if(currentBar > _songData.TimeSections.Count) SwitchScenes(new SongSelect());
 				if (i < 0 || i > _songData.TimeSections.Count - 1) continue;
+				
 
 				foreach (var a in _songData.TimeSections[i].BGM) {
 					var y = (a.Time - TimeSinceStart);
@@ -50,7 +53,7 @@ namespace IIDXClone.Scenes {
 					}
 
 					var y = (n.Time - TimeSinceStart);
-					
+
 					Graphics.Draw(
 						image,
 						lane,
